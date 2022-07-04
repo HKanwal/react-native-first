@@ -1,7 +1,15 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { WebView } from 'react-native-webview';
-import Card from './Components/Card';
+import { StyleSheet, Text, TextInput, View, AppRegistry } from 'react-native';
+import Card from './src/app/card/card';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+
+/////// Add this boilerplater
+
+// Initialize Apollo Client
+const client = new ApolloClient({
+  uri: 'https://api.spacex.land/graphql', // change this to match your endpoint
+  cache: new InMemoryCache()
+});
 
 interface GqlResponse {
   data?: {
@@ -11,14 +19,18 @@ interface GqlResponse {
   }
 }
 
+AppRegistry.registerComponent('MyApplication', () => App);
+
+///////////////////////////////
+
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [ceo, setCeo] = useState("");
+  const [ceo, setCeo] = useState('');
 
   const query = async () => {
     try {
-      const response = await fetch("https://api.spacex.land/graphql", {
-        method: "POST",
+      const response = await fetch('https://api.spacex.land/graphql', {
+        method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'
@@ -32,11 +44,11 @@ export default function App() {
         setCeo(json.data.company.ceo);
       }
       else {
-        setCeo("No ceo :(");
+        setCeo('No ceo :(');
       }
     } catch (error) {
       console.log(error);
-      setCeo("An error occurred.");
+      setCeo('An error occurred.');
     } finally {
       setIsLoading(false);
     }
@@ -46,12 +58,14 @@ export default function App() {
     query();
   }, []);
 
-  return (
-    <View style={styles.container}>
-        <TextInput style={styles.textInput} placeholder="Enter some notes about the video..." multiline textAlignVertical="top"></TextInput>
-        <Card name="Paul" style={styles.card}></Card>
-        <Text style={{flex: 1}}>{isLoading ? "Still loading..." : ceo}</Text>
-    </View>
+  return ( // Wrap root with ApolloProvider
+    <ApolloProvider client={client}>
+      <View style={styles.container}>
+          <TextInput style={styles.textInput} placeholder="Enter some notes about the video..." multiline textAlignVertical="top"></TextInput>
+          <Card name="Paul" style={styles.card}></Card>
+          <Text style={{flex: 1}}>{isLoading ? 'Still loading...' : ceo}</Text>
+      </View>
+    </ApolloProvider>
   );
 }
 

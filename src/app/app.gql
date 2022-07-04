@@ -1,0 +1,9 @@
+# has autocomplete b/c of apollo extension and apollo config file.
+# if not working, restart vs code to get apollo client server running
+query boardOfDirectors($onlyMusk: Boolean!) {
+    company {
+        ceo
+        coo @skip(if: $onlyMusk)
+        cto @skip(if: $onlyMusk)
+    }
+}
