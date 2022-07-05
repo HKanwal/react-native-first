@@ -1,6 +1,6 @@
 # copied from the graphql code generator quick start guide
 schema: https://api.spacex.land/graphql # schema data location
-documents: './src/**/*.graphql' # client side gql
+documents: './src/**/*.gql' # client side gql
 # output and list of plugins
 generates:
   ./src/app/spacex-api.ts:
