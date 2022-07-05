@@ -11,6 +11,11 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
+AppRegistry.registerComponent('MyApplication', () => App);
+
+///////////////////////////////
+
+// This is the type of code graphql-codegen autogenerates.
 interface GqlResponse {
   data?: {
     company?: {
@@ -18,10 +23,6 @@ interface GqlResponse {
     }
   }
 }
-
-AppRegistry.registerComponent('MyApplication', () => App);
-
-///////////////////////////////
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
